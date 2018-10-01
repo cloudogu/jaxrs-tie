@@ -1,0 +1,33 @@
+public static class {{className}}Links {
+
+    // sort of a hack to store the parent class type for sub resources,
+    // because mustache overrides the type variable in the loop
+    private static final Class<?> clazz = {{type}}.class;
+    private final UriBuilder builder;
+
+    {{#allParametersAnonymized}}
+    private final {{type}} {{name}};
+    {{/allParametersAnonymized}}
+
+    private {{className}}Links(UriBuilder builder{{^allParametersAnonymized.empty}}, {{/allParametersAnonymized.empty}}{{allParametersAnonymized}}) {
+        this.builder = builder;
+        {{#allParametersAnonymized}}
+        this.{{name}} = {{name}};
+        {{/allParametersAnonymized}}
+    }
+
+{{#endpoints}}
+    public URI {{name}}({{parameters}}) {
+        return builder.path({{type}}.class, "{{name}}").build( {{allParameters.names}} );
+    }
+{{/endpoints}}
+
+{{#subResources}}
+    public {{className}}Links {{methodName}}({{parameters}}) {
+        return new {{className}}Links(builder.path(clazz, "{{name}}"){{^allParameters.empty}}, {{/allParameters.empty}}{{allParameters.names}});
+    }
+
+    {{>resource}}
+
+{{/subResources}}
+}
