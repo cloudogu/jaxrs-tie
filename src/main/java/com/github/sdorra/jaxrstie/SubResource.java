@@ -6,7 +6,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.type.TypeMirror;
-import java.util.Set;
 
 public class SubResource extends Resource {
 
@@ -31,15 +30,7 @@ public class SubResource extends Resource {
         MethodParameters parameters = Methods.findPathParams(element);
         resource.setParameters(parameters);
 
-        Set<Methods.MethodWrapper> methods = Methods.findJaxRsMethods(processingEnv, returnElement);
-
-        for (Methods.MethodWrapper method : methods) {
-            if (method.isEndpoint()) {
-                resource.addEndpoint(Endpoint.of(method.getMethod(), resource));
-            } else {
-                resource.addSubResource(SubResource.from(processingEnv, method.getMethod(), resource));
-            }
-        }
+        Resources.append(processingEnv, resource, returnElement);
 
         return resource;
     }

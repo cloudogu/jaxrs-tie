@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.auto:auto-common:0.10'
+    implementation 'com.google.auto:auto-common:0.11'
     implementation 'com.github.spullara.mustache.java:compiler:0.9.5'
     implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
 

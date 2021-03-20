@@ -16,7 +16,7 @@ public class MethodParameters implements Iterable<MethodParameter> {
     }
 
     public ParameterNames getNames() {
-        return new ParameterNames(parameters.stream().map(p -> p.getName()).collect(Collectors.toList()));
+        return new ParameterNames(parameters.stream().map(MethodParameter::getName).collect(Collectors.toList()));
     }
 
     public boolean isEmpty() {

@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Model {
 
-    private String packageName;
-    private String simpleClassName;
-    private List<RootResource> rootResources;
+    private final String packageName;
+    private final String simpleClassName;
+    private final List<RootResource> rootResources;
 
     public Model(String packageName, String simpleClassName, List<RootResource> rootResources) {
         this.packageName = packageName;

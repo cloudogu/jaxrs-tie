@@ -26,7 +26,9 @@ import java.util.Set;
 public class ResourceProcessor extends AbstractProcessor {
 
     private static final String TEMPLATE = "com/github/sdorra/jaxrstie/template.mustache";
+
     @Override
+    @SuppressWarnings("java:S3516") // for annotation processors it is ok to return always the same value
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
             return false;
@@ -38,10 +40,10 @@ public class ResourceProcessor extends AbstractProcessor {
             }
         }
 
-
         return false;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     private void process(RoundEnvironment roundEnv, Element linkElement) {
         JaxRsTie annotation = linkElement.getAnnotation(JaxRsTie.class);
 
@@ -63,7 +65,6 @@ public class ResourceProcessor extends AbstractProcessor {
             write(model, linkElement);
         } catch (IOException ex) {
             throw new IllegalStateException("failed to create model", ex);
-
         }
     }
 

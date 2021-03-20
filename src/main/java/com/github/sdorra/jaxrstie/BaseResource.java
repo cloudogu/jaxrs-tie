@@ -23,27 +23,27 @@ public class BaseResource {
     }
 
     public MethodParameters getAllParametersAnonymized() {
-        List<MethodParameter> parameters = new ArrayList<>();
-        collectParameters(this, parameters);
-        return new MethodParameters(parameters);
+        List<MethodParameter> allParameters = new ArrayList<>();
+        collectParameters(this, allParameters);
+        return new MethodParameters(allParameters);
     }
 
     public MethodParameters getAllParameters() {
-        List<MethodParameter> parameters = new ArrayList<>();
-        collectParameters(getParent(), parameters);
+        List<MethodParameter> allParameters = new ArrayList<>();
+        collectParameters(getParent(), allParameters);
         for (MethodParameter parameter : getParameters()) {
-            parameters.add(parameter);
+            allParameters.add(parameter);
         }
-        return new MethodParameters(parameters);
+        return new MethodParameters(allParameters);
     }
 
     private void collectParameters(BaseResource resource, List<MethodParameter> parameters) {
         if (resource == null) {
             return;
         }
-        BaseResource parent = resource.getParent();
-        if (parent != null) {
-            collectParameters(parent, parameters);
+        BaseResource parentResource = resource.getParent();
+        if (parentResource != null) {
+            collectParameters(parentResource, parameters);
         }
         for (MethodParameter param : resource.getParameters()) {
             parameters.add(new MethodParameter("arg" + parameters.size(), param.getType()));

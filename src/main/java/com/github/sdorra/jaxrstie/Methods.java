@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Methods {
+public final class Methods {
+
+    private Methods() {
+    }
 
     public static MethodParameters findPathParams(ExecutableElement method) {
         List<MethodParameter> parameters = method.getParameters()
@@ -28,6 +31,7 @@ public class Methods {
         return variableElement.getAnnotation(PathParam.class) != null;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static Set<MethodWrapper> findJaxRsMethods(ProcessingEnvironment processingEnv, Element element) {
         TypeElement typeElement = MoreElements.asType(element);
         return MoreElements.getLocalAndInheritedMethods(typeElement, processingEnv.getTypeUtils(), processingEnv.getElementUtils())
@@ -41,7 +45,7 @@ public class Methods {
 
     public static class MethodWrapper {
 
-        private ExecutableElement method;
+        private final ExecutableElement method;
 
         public MethodWrapper(ExecutableElement method) {
             this.method = method;
@@ -51,6 +55,7 @@ public class Methods {
             return method;
         }
 
+        @SuppressWarnings("UnstableApiUsage")
         public boolean isSubResource() {
             return MoreElements.isAnnotationPresent(method, Path.class);
         }
@@ -59,6 +64,7 @@ public class Methods {
             return Visibility.ofElement(method) == Visibility.PUBLIC;
         }
 
+        @SuppressWarnings("UnstableApiUsage")
         public boolean isNotAbstract() {
             return ! MoreElements.hasModifiers(Modifier.ABSTRACT).apply(method);
         }

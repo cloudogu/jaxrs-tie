@@ -25,6 +25,7 @@ public abstract class Resource extends BaseResource {
         this.subResources.add(resource);
     }
 
+    @Override
     public void setParameters(MethodParameters parameters) {
         this.parameters = parameters;
     }
@@ -36,7 +37,6 @@ public abstract class Resource extends BaseResource {
     public String getClassName() {
         return Names.className(name);
     }
-
 
     public Set<Endpoint> getEndpoints() {
         return endpoints;

@@ -59,7 +59,7 @@ public class ResourceProcessorTest {
     }
 
     private static class InputStep {
-        private List<JavaFileObject> input;
+        private final List<JavaFileObject> input;
         private Processor processor;
 
         public InputStep(List<String> input) {
@@ -68,7 +68,7 @@ public class ResourceProcessorTest {
                     .collect(Collectors.toList());
         }
 
-        private final JavaFileObject resource(String className) {
+        private JavaFileObject resource(String className) {
             return JavaFileObjects.forResource("com/github/sdorra/jaxrstie/" + className + ".java");
         }
 
