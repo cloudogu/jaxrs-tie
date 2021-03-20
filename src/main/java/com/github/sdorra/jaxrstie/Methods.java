@@ -8,6 +8,7 @@ import javax.lang.model.element.*;
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class Methods {
                 .filter(MethodWrapper::isPublic)
                 .filter(MethodWrapper::isNotAbstract)
                 .filter(MethodWrapper::isJaxRsMethod)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public static class MethodWrapper {
