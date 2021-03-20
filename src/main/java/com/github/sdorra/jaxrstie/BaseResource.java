@@ -37,7 +37,7 @@ public class BaseResource {
         return new MethodParameters(parameters);
     }
 
-    private final void collectParameters(BaseResource resource, List<MethodParameter> parameters) {
+    private void collectParameters(BaseResource resource, List<MethodParameter> parameters) {
         if (resource == null) {
             return;
         }

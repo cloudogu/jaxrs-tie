@@ -15,13 +15,14 @@ repositories {
 dependencies {
     implementation 'com.google.auto:auto-common:0.10'
     implementation 'com.github.spullara.mustache.java:compiler:0.9.5'
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
 
     compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
     annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
 
     implementation 'com.google.guava:guava:24.0-jre'
     testImplementation 'com.google.testing.compile:compile-testing:0.19'
-    implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+    testImplementation 'javax.validation:validation-api:2.0.1.Final'
 
     // see https://github.com/google/compile-testing/issues/28
     if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {

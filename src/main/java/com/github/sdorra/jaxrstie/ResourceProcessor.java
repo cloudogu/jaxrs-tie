@@ -11,7 +11,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import javax.ws.rs.Path;
 import java.io.IOException;
@@ -80,9 +79,6 @@ public class ResourceProcessor extends AbstractProcessor {
         Filer filer = processingEnv.getFiler();
 
         JavaFileObject jfo = filer.createSourceFile(model.getClassName(), element);
-
-        processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "create file " + jfo.getName());
-
         Mustache mustache = new DefaultMustacheFactory().compile(TEMPLATE);
 
         try (Writer writer = jfo.openWriter()) {

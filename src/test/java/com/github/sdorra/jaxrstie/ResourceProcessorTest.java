@@ -47,6 +47,13 @@ public class ResourceProcessorTest {
                 .expect("ELinks");
     }
 
+    @Test
+    public void testWithValidation() {
+        with("F", "ResourceWithValidation")
+                .processor(new ResourceProcessor())
+                .expect("FLinks");
+    }
+
     public InputStep with(String... classes) {
         return new InputStep(Lists.newArrayList(classes));
     }
