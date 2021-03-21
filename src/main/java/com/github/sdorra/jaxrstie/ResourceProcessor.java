@@ -1,10 +1,6 @@
 package com.github.sdorra.jaxrstie;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
 import com.google.auto.common.MoreElements;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import org.kohsuke.MetaInfServices;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -21,7 +17,6 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import javax.ws.rs.Path;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +27,6 @@ import java.util.Set;
 @SupportedAnnotationTypes("com.github.sdorra.jaxrstie.JaxRsTie")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ResourceProcessor extends AbstractProcessor {
-
-  private static final String TEMPLATE = "com/github/sdorra/jaxrstie/template.mustache";
 
   @Override
   @SuppressWarnings("java:S3516") // for annotation processors it is ok to return always the same value
@@ -87,24 +80,10 @@ public class ResourceProcessor extends AbstractProcessor {
   private void write(Model model, Element element) throws IOException {
     Filer filer = processingEnv.getFiler();
     JavaFileObject jfo = filer.createSourceFile(model.getClassName(), element);
+    SourceCodeGenerator generator = new MustacheSourceCodeGenerator();
     try (Writer writer = jfo.openWriter()) {
-      writer.write(generateSourceCode(model));
+      generator.generate(writer, model);
     }
   }
 
-  private String generateSourceCode(Model model) {
-    StringWriter writer = new StringWriter();
-    Mustache mustache = new DefaultMustacheFactory().compile(TEMPLATE);
-    mustache.execute(writer, model);
-    return format(writer.toString());
-  }
-
-  private String format(String code) {
-    Formatter formatter = new Formatter();
-    try {
-      return formatter.formatSource(code);
-    } catch (FormatterException ex) {
-      throw new IllegalStateException("failed to format source code", ex);
-    }
-  }
 }
