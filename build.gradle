@@ -3,31 +3,32 @@
  */
 
 plugins {
-    id 'java'
-    id 'maven-publish'
+  id 'java'
+  id 'maven-publish'
 }
 
 repositories {
-    mavenLocal()
-    mavenCentral()
+  mavenLocal()
+  mavenCentral()
 }
 
 dependencies {
-    implementation 'com.google.auto:auto-common:0.11'
-    implementation 'com.github.spullara.mustache.java:compiler:0.9.5'
-    implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+  implementation 'com.google.auto:auto-common:0.11'
+  implementation 'com.github.spullara.mustache.java:compiler:0.9.5'
+  implementation 'com.google.googlejavaformat:google-java-format:1.9'
+  implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
 
-    compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
-    annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
+  compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
+  annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
 
-    implementation 'com.google.guava:guava:24.0-jre'
-    testImplementation 'com.google.testing.compile:compile-testing:0.19'
-    testImplementation 'javax.validation:validation-api:2.0.1.Final'
+  implementation 'com.google.guava:guava:24.0-jre'
+  testImplementation 'com.google.testing.compile:compile-testing:0.19'
+  testImplementation 'javax.validation:validation-api:2.0.1.Final'
 
-    // see https://github.com/google/compile-testing/issues/28
-    if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
-        testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
-    }
+  // see https://github.com/google/compile-testing/issues/28
+  if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
+    testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
+  }
 }
 
 group = 'com.github.sdorra'
@@ -36,18 +37,18 @@ description = 'JAX-RS Tie'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 java {
-    withSourcesJar()
-    withJavadocJar()
+  withSourcesJar()
+  withJavadocJar()
 }
 
 publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
+  publications {
+    maven(MavenPublication) {
+      from(components.java)
     }
+  }
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+  options.encoding = 'UTF-8'
 }

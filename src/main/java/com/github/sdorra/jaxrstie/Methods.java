@@ -15,77 +15,77 @@ import java.util.stream.Collectors;
 
 public final class Methods {
 
-    private Methods() {
+  private Methods() {
+  }
+
+  public static MethodParameters findPathParams(ExecutableElement method) {
+    List<MethodParameter> parameters = method.getParameters()
+      .stream()
+      .filter(Methods::isPathParam)
+      .map(MethodParameter::of)
+      .collect(Collectors.toList());
+    return new MethodParameters(parameters);
+  }
+
+  private static boolean isPathParam(VariableElement variableElement) {
+    return variableElement.getAnnotation(PathParam.class) != null;
+  }
+
+  @SuppressWarnings("UnstableApiUsage")
+  public static Set<MethodWrapper> findJaxRsMethods(ProcessingEnvironment processingEnv, Element element) {
+    TypeElement typeElement = MoreElements.asType(element);
+    return MoreElements.getLocalAndInheritedMethods(typeElement, processingEnv.getTypeUtils(), processingEnv.getElementUtils())
+      .stream()
+      .map(MethodWrapper::new)
+      .filter(MethodWrapper::isPublic)
+      .filter(MethodWrapper::isNotAbstract)
+      .filter(MethodWrapper::isJaxRsMethod)
+      .collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  public static class MethodWrapper {
+
+    private final ExecutableElement method;
+
+    public MethodWrapper(ExecutableElement method) {
+      this.method = method;
     }
 
-    public static MethodParameters findPathParams(ExecutableElement method) {
-        List<MethodParameter> parameters = method.getParameters()
-                .stream()
-                .filter(Methods::isPathParam)
-                .map(MethodParameter::of)
-                .collect(Collectors.toList());
-        return new MethodParameters(parameters);
-    }
-
-    private static boolean isPathParam(VariableElement variableElement) {
-        return variableElement.getAnnotation(PathParam.class) != null;
+    public ExecutableElement getMethod() {
+      return method;
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static Set<MethodWrapper> findJaxRsMethods(ProcessingEnvironment processingEnv, Element element) {
-        TypeElement typeElement = MoreElements.asType(element);
-        return MoreElements.getLocalAndInheritedMethods(typeElement, processingEnv.getTypeUtils(), processingEnv.getElementUtils())
-                .stream()
-                .map(MethodWrapper::new)
-                .filter(MethodWrapper::isPublic)
-                .filter(MethodWrapper::isNotAbstract)
-                .filter(MethodWrapper::isJaxRsMethod)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+    public boolean isSubResource() {
+      return MoreElements.isAnnotationPresent(method, Path.class);
     }
 
-    public static class MethodWrapper {
-
-        private final ExecutableElement method;
-
-        public MethodWrapper(ExecutableElement method) {
-            this.method = method;
-        }
-
-        public ExecutableElement getMethod() {
-            return method;
-        }
-
-        @SuppressWarnings("UnstableApiUsage")
-        public boolean isSubResource() {
-            return MoreElements.isAnnotationPresent(method, Path.class);
-        }
-
-        public boolean isPublic() {
-            return Visibility.ofElement(method) == Visibility.PUBLIC;
-        }
-
-        @SuppressWarnings("UnstableApiUsage")
-        public boolean isNotAbstract() {
-            return ! MoreElements.hasModifiers(Modifier.ABSTRACT).apply(method);
-        }
-
-        public boolean isEndpoint() {
-            for (AnnotationMirror annotationMirror : method.getAnnotationMirrors()) {
-                if (Annotations.isTypeOf(annotationMirror, HttpMethod.class)) {
-                    return true;
-                }
-
-                Element element = annotationMirror.getAnnotationType().asElement();
-                if (element.getAnnotation(HttpMethod.class) != null) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public boolean isJaxRsMethod() {
-            return isSubResource() || isEndpoint();
-        }
+    public boolean isPublic() {
+      return Visibility.ofElement(method) == Visibility.PUBLIC;
     }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public boolean isNotAbstract() {
+      return !MoreElements.hasModifiers(Modifier.ABSTRACT).apply(method);
+    }
+
+    public boolean isEndpoint() {
+      for (AnnotationMirror annotationMirror : method.getAnnotationMirrors()) {
+        if (Annotations.isTypeOf(annotationMirror, HttpMethod.class)) {
+          return true;
+        }
+
+        Element element = annotationMirror.getAnnotationType().asElement();
+        if (element.getAnnotation(HttpMethod.class) != null) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public boolean isJaxRsMethod() {
+      return isSubResource() || isEndpoint();
+    }
+  }
 
 }

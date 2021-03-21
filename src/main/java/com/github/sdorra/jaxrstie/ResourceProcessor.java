@@ -3,9 +3,16 @@ package com.github.sdorra.jaxrstie;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.google.auto.common.MoreElements;
+import com.google.googlejavaformat.java.Formatter;
+import com.google.googlejavaformat.java.FormatterException;
 import org.kohsuke.MetaInfServices;
 
-import javax.annotation.processing.*;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.Processor;
+import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -14,6 +21,7 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import javax.ws.rs.Path;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,65 +33,78 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ResourceProcessor extends AbstractProcessor {
 
-    private static final String TEMPLATE = "com/github/sdorra/jaxrstie/template.mustache";
+  private static final String TEMPLATE = "com/github/sdorra/jaxrstie/template.mustache";
 
-    @Override
-    @SuppressWarnings("java:S3516") // for annotation processors it is ok to return always the same value
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        if (roundEnv.processingOver()) {
-            return false;
-        }
-
-        for ( TypeElement annotation : annotations ) {
-            for ( Element element : roundEnv.getElementsAnnotatedWith(annotation) ) {
-                process(roundEnv, element);
-            }
-        }
-
-        return false;
+  @Override
+  @SuppressWarnings("java:S3516") // for annotation processors it is ok to return always the same value
+  public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    if (roundEnv.processingOver()) {
+      return false;
     }
 
-    @SuppressWarnings("UnstableApiUsage")
-    private void process(RoundEnvironment roundEnv, Element linkElement) {
-        JaxRsTie annotation = linkElement.getAnnotation(JaxRsTie.class);
-
-        List<RootResource> rootResources = new ArrayList<>();
-        for ( Element element : roundEnv.getElementsAnnotatedWith(Path.class) ) {
-            if (isClass(element) && element.toString().matches(annotation.value())) {
-                RootResource resource = RootResource.from(processingEnv, element);
-                rootResources.add(resource);
-            }
-        }
-
-        TypeElement linkType = MoreElements.asType(linkElement);
-
-        String className = linkType.getSimpleName().toString() + "Links";
-        String packageName = getPackageName(linkType);
-
-        Model model = new Model(packageName, className, rootResources);
-        try {
-            write(model, linkElement);
-        } catch (IOException ex) {
-            throw new IllegalStateException("failed to create model", ex);
-        }
+    for (TypeElement annotation : annotations) {
+      for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
+        process(roundEnv, element);
+      }
     }
 
-    private boolean isClass(Element element) {
-        return element.getKind() == ElementKind.CLASS;
+    return false;
+  }
+
+  @SuppressWarnings("UnstableApiUsage")
+  private void process(RoundEnvironment roundEnv, Element linkElement) {
+    JaxRsTie annotation = linkElement.getAnnotation(JaxRsTie.class);
+
+    List<RootResource> rootResources = new ArrayList<>();
+    for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
+      if (isClass(element) && element.toString().matches(annotation.value())) {
+        RootResource resource = RootResource.from(processingEnv, element);
+        rootResources.add(resource);
+      }
     }
 
-    private String getPackageName(TypeElement classElement) {
-        return ((PackageElement) classElement.getEnclosingElement()).getQualifiedName().toString();
+    TypeElement linkType = MoreElements.asType(linkElement);
+
+    String className = linkType.getSimpleName().toString() + "Links";
+    String packageName = getPackageName(linkType);
+
+    Model model = new Model(packageName, className, rootResources);
+    try {
+      write(model, linkElement);
+    } catch (IOException ex) {
+      throw new IllegalStateException("failed to create model", ex);
     }
+  }
 
-    private void write(Model model, Element element) throws IOException {
-        Filer filer = processingEnv.getFiler();
+  private boolean isClass(Element element) {
+    return element.getKind() == ElementKind.CLASS;
+  }
 
-        JavaFileObject jfo = filer.createSourceFile(model.getClassName(), element);
-        Mustache mustache = new DefaultMustacheFactory().compile(TEMPLATE);
+  private String getPackageName(TypeElement classElement) {
+    return ((PackageElement) classElement.getEnclosingElement()).getQualifiedName().toString();
+  }
 
-        try (Writer writer = jfo.openWriter()) {
-            mustache.execute(writer, model).flush();
-        }
+  private void write(Model model, Element element) throws IOException {
+    Filer filer = processingEnv.getFiler();
+    JavaFileObject jfo = filer.createSourceFile(model.getClassName(), element);
+    try (Writer writer = jfo.openWriter()) {
+      writer.write(generateSourceCode(model));
     }
+  }
+
+  private String generateSourceCode(Model model) {
+    StringWriter writer = new StringWriter();
+    Mustache mustache = new DefaultMustacheFactory().compile(TEMPLATE);
+    mustache.execute(writer, model);
+    return format(writer.toString());
+  }
+
+  private String format(String code) {
+    Formatter formatter = new Formatter();
+    try {
+      return formatter.formatSource(code);
+    } catch (FormatterException ex) {
+      throw new IllegalStateException("failed to format source code", ex);
+    }
+  }
 }
