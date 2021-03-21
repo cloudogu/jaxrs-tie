@@ -1,0 +1,19 @@
+dependencies {
+  implementation project(':core')
+  implementation 'com.google.auto:auto-common:0.11'
+  implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+  implementation 'com.squareup:javapoet:1.13.0'
+  implementation 'com.google.guava:guava:24.0-jre'
+
+  compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
+  annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
+
+  testImplementation 'com.google.testing.compile:compile-testing:0.19'
+  testImplementation 'javax.validation:validation-api:2.0.1.Final'
+
+  // see https://github.com/google/compile-testing/issues/28
+  if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
+    testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
+  }
+}
+
