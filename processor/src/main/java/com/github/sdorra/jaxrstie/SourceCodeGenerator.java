@@ -40,6 +40,7 @@ class SourceCodeGenerator {
 
   private static final String FIELD_URI_INFO = "uriInfo";
   private static final String FIELD_BUILDER = "builder";
+  private static final String FIELD_URI = "uri";
   private static final String STATEMENT_FIELD_ASSIGNMENT = "this.$N = $N";
 
   void generate(Writer writer, Model model) throws IOException {
@@ -58,8 +59,39 @@ class SourceCodeGenerator {
       addResource(builder, rootResource);
     }
 
+    builder.addType(createLinkSpec());
+
     JavaFile javaFile = JavaFile.builder(model.getPackageName(), builder.build()).build();
+    javaFile.writeTo(System.out);
     javaFile.writeTo(writer);
+  }
+
+  private TypeSpec createLinkSpec() {
+    MethodSpec constructor = MethodSpec.constructorBuilder()
+      .addModifiers(Modifier.PRIVATE)
+      .addParameter(URI.class, FIELD_URI)
+      .addStatement(STATEMENT_FIELD_ASSIGNMENT, FIELD_URI, FIELD_URI)
+      .build();
+
+    MethodSpec asUri = MethodSpec.methodBuilder("asUri")
+      .addModifiers(Modifier.PUBLIC)
+      .returns(URI.class)
+      .addStatement("return $N", FIELD_URI)
+      .build();
+
+    MethodSpec asString = MethodSpec.methodBuilder("asString")
+      .addModifiers(Modifier.PUBLIC)
+      .returns(String.class)
+      .addStatement("return $N.toASCIIString()", FIELD_URI)
+      .build();
+
+    return TypeSpec.classBuilder("BuilderLink")
+      .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+      .addField(URI.class, FIELD_URI, Modifier.PRIVATE, Modifier.FINAL)
+      .addMethod(constructor)
+      .addMethod(asUri)
+      .addMethod(asString)
+      .build();
   }
 
   private void addResource(TypeSpec.Builder parent, Resource resource) {
@@ -137,9 +169,11 @@ class SourceCodeGenerator {
     }
 
     for (Endpoint endpoint : resource.getEndpoints()) {
+      ClassName builderLink = ClassName.get("", "BuilderLink");
+
       MethodSpec.Builder endpointMethod = MethodSpec.methodBuilder(endpoint.getName())
         .addModifiers(Modifier.PUBLIC)
-        .returns(URI.class);
+        .returns(builderLink);
 
       for (MethodParameter parameter : endpoint.getParameters()) {
         endpointMethod.addParameter(
@@ -148,11 +182,17 @@ class SourceCodeGenerator {
       }
 
       endpointMethod.addStatement(
-        "return $N.path($T.class, $S).build($L)",
+        "$T uri = $N.path($T.class, $S).build($L)",
+        URI.class,
         FIELD_BUILDER,
         ClassName.bestGuess(resource.getType()),
         endpoint.getName(),
         endpoint.getAllParameters().getNames()
+      );
+
+      endpointMethod.addStatement(
+        "return new $T(uri)",
+        builderLink
       );
 
       resourceBuilder.addMethod(endpointMethod.build());

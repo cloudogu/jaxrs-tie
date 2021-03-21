@@ -24,35 +24,53 @@
 
 package com.example;
 
+import java.lang.String;
 import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 public final class FLinks {
 
-    private final UriInfo uriInfo;
+  private final UriInfo uriInfo;
 
-    public FLinks(UriInfo uriInfo) {
-        this.uriInfo = uriInfo;
+  public FLinks(UriInfo uriInfo) {
+    this.uriInfo = uriInfo;
+  }
+
+  public ResourceWithValidationLinks resourceWithValidation() {
+    return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(ResourceWithValidation.class));
+  }
+
+  public static class ResourceWithValidationLinks {
+
+    private final UriBuilder builder;
+
+    private ResourceWithValidationLinks(UriBuilder builder) {
+      this.builder = builder;
     }
 
-    public ResourceWithValidationLinks resourceWithValidation() {
-        return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(ResourceWithValidation.class));
+    public BuilderLink create(String id) {
+      URI uri = builder.path(ResourceWithValidation.class, "create").build(id);
+      return new BuilderLink(uri);
     }
 
-    public static class ResourceWithValidationLinks {
+  }
 
-        private final UriBuilder builder;
+  public static class BuilderLink {
 
-        private ResourceWithValidationLinks(UriBuilder builder) {
-            this.builder = builder;
-        }
+    private final URI uri;
 
-        public URI create(String id) {
-            return builder.path(ResourceWithValidation.class, "create").build( id );
-        }
-
+    private BuilderLink(URI uri) {
+      this.uri = uri;
     }
 
+    public URI asUri() {
+      return uri;
+    }
+
+    public String asString() {
+      return uri.toASCIIString();
+    }
+  }
 
 }

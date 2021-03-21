@@ -24,14 +24,33 @@
 
 package com.example;
 
+import java.lang.String;
+import java.net.URI;
 import javax.ws.rs.core.UriInfo;
 
 public final class CLinks {
 
-    private final UriInfo uriInfo;
+  private final UriInfo uriInfo;
 
-    public CLinks(UriInfo uriInfo) {
-        this.uriInfo = uriInfo;
+  public CLinks(UriInfo uriInfo) {
+    this.uriInfo = uriInfo;
+  }
+
+
+  public static class BuilderLink {
+
+    private final URI uri;
+
+    private BuilderLink(URI uri) {
+      this.uri = uri;
     }
 
+    public URI asUri() {
+      return uri;
+    }
+
+    public String asString() {
+      return uri.toASCIIString();
+    }
+  }
 }

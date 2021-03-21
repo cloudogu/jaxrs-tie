@@ -24,52 +24,67 @@
 
 package com.example;
 
+import java.lang.String;
 import java.net.URI;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 public final class DLinks {
 
-    private final UriInfo uriInfo;
+  private final UriInfo uriInfo;
 
-    public DLinks(UriInfo uriInfo) {
-        this.uriInfo = uriInfo;
+  public DLinks(UriInfo uriInfo) {
+    this.uriInfo = uriInfo;
+  }
+
+  public SubLinks sub() {
+    return new SubLinks(uriInfo.getBaseUriBuilder().path(SubResource.class));
+  }
+
+  public static class SubLinks {
+
+    private final UriBuilder builder;
+
+    private SubLinks(UriBuilder builder) {
+      this.builder = builder;
     }
 
-
-    public SubLinks sub() {
-        return new SubLinks(uriInfo.getBaseUriBuilder().path(SubResource.class));
+    public FindLinks find() {
+      return new FindLinks(builder.path(SubResource.class, "find"));
     }
 
-    public static class SubLinks {
+    public static class FindLinks {
 
-        private final UriBuilder builder;
+      private final UriBuilder builder;
 
-        private SubLinks(UriBuilder builder) {
-            this.builder = builder;
-        }
+      private FindLinks(UriBuilder builder) {
+        this.builder = builder;
+      }
 
-
-        public FindLinks find() {
-            return new FindLinks(builder.path(SubResource.class, "find"));
-        }
-
-        public static class FindLinks {
-
-            private final UriBuilder builder;
-
-            private FindLinks(UriBuilder builder) {
-                this.builder = builder;
-            }
-
-            public URI get(String id) {
-                return builder.path(SubResource.ChildResource.class, "get").build( id );
-            }
-
-        }
-
+      public BuilderLink get(String id) {
+        URI uri = builder.path(SubResource.ChildResource.class, "get").build(id);
+        return new BuilderLink(uri);
+      }
 
     }
 
+  }
+
+  public static class BuilderLink {
+
+    private final URI uri;
+
+    private BuilderLink(URI uri) {
+      this.uri = uri;
+    }
+
+    public URI asUri() {
+      return uri;
+    }
+
+    public String asString() {
+      return uri.toASCIIString();
+    }
+  }
 
 }
