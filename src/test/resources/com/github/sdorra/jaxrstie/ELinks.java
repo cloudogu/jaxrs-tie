@@ -1,10 +1,10 @@
 package com.example;
 
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
-public class ELinks {
+public final class ELinks {
 
     private final UriInfo uriInfo;
 
@@ -12,14 +12,11 @@ public class ELinks {
         this.uriInfo = uriInfo;
     }
 
-
     public SubResourceWithParamLinks subResourceWithParam() {
-        return new SubResourceWithParamLinks(uriInfo.getBaseUriBuilder().path(com.example.SubResourceWithParam.class));
+        return new SubResourceWithParamLinks(uriInfo.getBaseUriBuilder().path(SubResourceWithParam.class));
     }
 
     public static class SubResourceWithParamLinks {
-
-        private static final Class<?> clazz = com.example.SubResourceWithParam.class;
 
         private final UriBuilder builder;
 
@@ -28,12 +25,10 @@ public class ELinks {
         }
 
         public GroupLinks group(String id) {
-            return new GroupLinks(builder.path(clazz, "group"), id);
+            return new GroupLinks(builder.path(SubResourceWithParam.class, "group"), id);
         }
 
         public static class GroupLinks {
-
-            private static final Class<?> clazz = com.example.SubResourceWithParam.ChildResource.class;
 
             private final UriBuilder builder;
             private final String arg0;
@@ -44,7 +39,7 @@ public class ELinks {
             }
 
             public URI get(String id) {
-                return builder.path(com.example.SubResourceWithParam.ChildResource.class, "get").build( arg0, id );
+                return builder.path(SubResourceWithParam.ChildResource.class, "get").build( arg0, id );
             }
 
         }

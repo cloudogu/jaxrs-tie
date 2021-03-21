@@ -1,10 +1,10 @@
 package com.example;
 
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
-public class FLinks {
+public final class FLinks {
 
     private final UriInfo uriInfo;
 
@@ -13,11 +13,10 @@ public class FLinks {
     }
 
     public ResourceWithValidationLinks resourceWithValidation() {
-        return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(com.example.ResourceWithValidation.class));
+        return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(ResourceWithValidation.class));
     }
 
     public static class ResourceWithValidationLinks {
-        private static final Class<?> clazz = com.example.ResourceWithValidation.class;
 
         private final UriBuilder builder;
 
@@ -26,7 +25,7 @@ public class FLinks {
         }
 
         public URI create(String id) {
-            return builder.path(com.example.ResourceWithValidation.class, "create").build( id );
+            return builder.path(ResourceWithValidation.class, "create").build( id );
         }
 
     }

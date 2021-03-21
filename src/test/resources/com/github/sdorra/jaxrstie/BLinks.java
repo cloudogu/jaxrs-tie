@@ -1,10 +1,10 @@
 package com.example;
 
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
-public class BLinks {
+public final class BLinks {
 
     private final UriInfo uriInfo;
 
@@ -13,12 +13,10 @@ public class BLinks {
     }
 
     public SimpleLinks simple() {
-        return new SimpleLinks(uriInfo.getBaseUriBuilder().path(com.example.SimpleResource.class));
+        return new SimpleLinks(uriInfo.getBaseUriBuilder().path(SimpleResource.class));
     }
 
     public static class SimpleLinks {
-        private static final Class<?> clazz = com.example.SimpleResource.class;
-
         private final UriBuilder builder;
 
         private SimpleLinks(UriBuilder builder) {
@@ -26,11 +24,11 @@ public class BLinks {
         }
 
         public URI get() {
-            return builder.path(com.example.SimpleResource.class, "get").build(  );
+            return builder.path(SimpleResource.class, "get").build(  );
         }
 
         public URI delete(String id) {
-            return builder.path(com.example.SimpleResource.class, "delete").build( id );
+            return builder.path(SimpleResource.class, "delete").build( id );
         }
 
     }

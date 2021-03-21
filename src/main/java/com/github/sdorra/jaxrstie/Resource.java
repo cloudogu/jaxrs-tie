@@ -34,6 +34,10 @@ public abstract class Resource extends BaseResource {
     return Names.methodName(name);
   }
 
+  public String getType() {
+    return type;
+  }
+
   public String getClassName() {
     return Names.className(name);
   }

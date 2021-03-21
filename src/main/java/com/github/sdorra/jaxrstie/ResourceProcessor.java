@@ -80,7 +80,7 @@ public class ResourceProcessor extends AbstractProcessor {
   private void write(Model model, Element element) throws IOException {
     Filer filer = processingEnv.getFiler();
     JavaFileObject jfo = filer.createSourceFile(model.getClassName(), element);
-    SourceCodeGenerator generator = new MustacheSourceCodeGenerator();
+    SourceCodeGenerator generator = new SourceCodeGenerator();
     try (Writer writer = jfo.openWriter()) {
       generator.generate(writer, model);
     }

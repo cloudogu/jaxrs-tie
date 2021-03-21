@@ -1,10 +1,10 @@
 package com.example;
 
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
-public class DLinks {
+public final class DLinks {
 
     private final UriInfo uriInfo;
 
@@ -14,12 +14,10 @@ public class DLinks {
 
 
     public SubLinks sub() {
-        return new SubLinks(uriInfo.getBaseUriBuilder().path(com.example.SubResource.class));
+        return new SubLinks(uriInfo.getBaseUriBuilder().path(SubResource.class));
     }
 
     public static class SubLinks {
-
-        private static final Class<?> clazz = com.example.SubResource.class;
 
         private final UriBuilder builder;
 
@@ -29,12 +27,10 @@ public class DLinks {
 
 
         public FindLinks find() {
-            return new FindLinks(builder.path(clazz, "find"));
+            return new FindLinks(builder.path(SubResource.class, "find"));
         }
 
         public static class FindLinks {
-
-            private static final Class<?> clazz = com.example.SubResource.ChildResource.class;
 
             private final UriBuilder builder;
 
@@ -43,7 +39,7 @@ public class DLinks {
             }
 
             public URI get(String id) {
-                return builder.path(com.example.SubResource.ChildResource.class, "get").build( id );
+                return builder.path(SubResource.ChildResource.class, "get").build( id );
             }
 
         }
