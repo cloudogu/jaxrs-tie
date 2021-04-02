@@ -26,6 +26,7 @@ package com.github.sdorra.jaxrstie.internal;
 
 import com.github.sdorra.jaxrstie.GenerateLinks;
 import com.google.auto.common.MoreElements;
+import com.google.common.base.Strings;
 import org.kohsuke.MetaInfServices;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -74,7 +75,7 @@ public class ResourceProcessor extends AbstractProcessor {
 
     List<RootResource> rootResources = new ArrayList<>();
     for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
-      if (isClass(element) && element.toString().matches(annotation.includes())) {
+      if (shouldProcess(annotation, element)) {
         RootResource resource = RootResource.from(processingEnv, element);
         rootResources.add(resource);
       }
@@ -91,6 +92,18 @@ public class ResourceProcessor extends AbstractProcessor {
     } catch (IOException ex) {
       throw new IllegalStateException("failed to create model", ex);
     }
+  }
+
+  private boolean shouldProcess(GenerateLinks annotation, Element element) {
+    return isClass(element) && isIncluded(annotation, element.toString());
+  }
+
+  private boolean isIncluded(GenerateLinks annotation, String resourceClass) {
+    return resourceClass.matches(annotation.includes()) && ! isExcluded(annotation, resourceClass);
+  }
+
+  private boolean isExcluded(GenerateLinks annotation, String resourceClass) {
+    return ! Strings.isNullOrEmpty(annotation.excludes()) && resourceClass.matches(annotation.excludes());
   }
 
   private boolean isClass(Element element) {

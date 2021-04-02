@@ -78,6 +78,13 @@ public class ResourceProcessorTest {
       .expect("FLinks");
   }
 
+  @Test
+  public void testWithExclude() {
+    with("G", "SimpleResource")
+      .processor(new ResourceProcessor())
+      .expect("GLinks");
+  }
+
   public InputStep with(String... classes) {
     return new InputStep(Lists.newArrayList(classes));
   }

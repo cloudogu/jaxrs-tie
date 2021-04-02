@@ -22,30 +22,9 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.example;
 
-import java.lang.annotation.*;
+import com.github.sdorra.jaxrstie.GenerateLinks;
 
-/**
- * Generate a link builder from jax-rs annotations.
- */
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
-public @interface GenerateLinks {
-
-  /**
-   * Specify which resources are included in the link generation.
-   * Defaults to all resources.
-   *
-   * @return regex for resource inclusion
-   */
-  String includes() default ".*";
-
-  /**
-   * Specify which resources are excluded from the link generation.
-   *
-   * @return regex for resource exclusion
-   */
-  String excludes() default "";
-}
+@GenerateLinks(excludes = "^.*SimpleResource$")
+public class G {}

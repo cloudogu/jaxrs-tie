@@ -22,30 +22,35 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.example;
 
-import java.lang.annotation.*;
+import java.lang.String;
+import java.net.URI;
+import javax.ws.rs.core.UriInfo;
 
-/**
- * Generate a link builder from jax-rs annotations.
- */
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.SOURCE)
-public @interface GenerateLinks {
+public final class GLinks {
 
-  /**
-   * Specify which resources are included in the link generation.
-   * Defaults to all resources.
-   *
-   * @return regex for resource inclusion
-   */
-  String includes() default ".*";
+  private final UriInfo uriInfo;
 
-  /**
-   * Specify which resources are excluded from the link generation.
-   *
-   * @return regex for resource exclusion
-   */
-  String excludes() default "";
+  public CLinks(UriInfo uriInfo) {
+    this.uriInfo = uriInfo;
+  }
+
+
+  public static class BuilderLink {
+
+    private final URI uri;
+
+    private BuilderLink(URI uri) {
+      this.uri = uri;
+    }
+
+    public URI asUri() {
+      return uri;
+    }
+
+    public String asString() {
+      return uri.toASCIIString();
+    }
+  }
 }
