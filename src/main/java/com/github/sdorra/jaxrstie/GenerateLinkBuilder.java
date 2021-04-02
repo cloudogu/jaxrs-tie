@@ -32,7 +32,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface GenerateLinks {
+public @interface GenerateLinkBuilder {
 
   /**
    * Name of the generated link builder class.

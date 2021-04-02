@@ -24,7 +24,7 @@
 
 package com.example;
 
-import com.github.sdorra.jaxrstie.GenerateLinks;
+import com.github.sdorra.jaxrstie.GenerateLinkBuilder;
 
-@GenerateLinks(packageName = "org.jaxrstie", className = "LinkBuilder")
+@GenerateLinkBuilder(packageName = "org.jaxrstie", className = "LinkBuilder")
 public class H {}

@@ -24,7 +24,7 @@
 
 package com.example;
 
-import com.github.sdorra.jaxrstie.GenerateLinks;
+import com.github.sdorra.jaxrstie.GenerateLinkBuilder;
 
-@GenerateLinks
+@GenerateLinkBuilder
 public class F {}

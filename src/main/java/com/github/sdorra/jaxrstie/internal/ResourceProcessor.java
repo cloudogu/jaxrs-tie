@@ -24,7 +24,7 @@
 
 package com.github.sdorra.jaxrstie.internal;
 
-import com.github.sdorra.jaxrstie.GenerateLinks;
+import com.github.sdorra.jaxrstie.GenerateLinkBuilder;
 import com.google.auto.common.MoreElements;
 import com.google.common.base.Strings;
 import org.kohsuke.MetaInfServices;
@@ -51,7 +51,7 @@ import java.util.Set;
 
 @MetaInfServices(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
-@SupportedAnnotationTypes("com.github.sdorra.jaxrstie.GenerateLinks")
+@SupportedAnnotationTypes("com.github.sdorra.jaxrstie.GenerateLinkBuilder")
 public class ResourceProcessor extends AbstractProcessor {
 
   @Override
@@ -71,7 +71,7 @@ public class ResourceProcessor extends AbstractProcessor {
   }
 
   private void process(RoundEnvironment roundEnv, Element linkElement) {
-    GenerateLinks annotation = linkElement.getAnnotation(GenerateLinks.class);
+    GenerateLinkBuilder annotation = linkElement.getAnnotation(GenerateLinkBuilder.class);
 
     List<RootResource> rootResources = collectResources(roundEnv, annotation);
 
@@ -88,7 +88,7 @@ public class ResourceProcessor extends AbstractProcessor {
     }
   }
 
-  private List<RootResource> collectResources(RoundEnvironment roundEnv, GenerateLinks annotation) {
+  private List<RootResource> collectResources(RoundEnvironment roundEnv, GenerateLinkBuilder annotation) {
     List<RootResource> rootResources = new ArrayList<>();
     for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
       if (shouldProcess(annotation, element)) {
@@ -99,29 +99,29 @@ public class ResourceProcessor extends AbstractProcessor {
     return rootResources;
   }
 
-  private String className(GenerateLinks annotation, TypeElement linkType) {
+  private String className(GenerateLinkBuilder annotation, TypeElement linkType) {
     if (Strings.isNullOrEmpty(annotation.className())) {
       return linkType.getSimpleName().toString() + "Links";
     }
     return annotation.className();
   }
 
-  private String packageName(GenerateLinks annotation, TypeElement classElement) {
+  private String packageName(GenerateLinkBuilder annotation, TypeElement classElement) {
     if (Strings.isNullOrEmpty(annotation.packageName())) {
       return ((PackageElement) classElement.getEnclosingElement()).getQualifiedName().toString();
     }
     return annotation.packageName();
   }
 
-  private boolean shouldProcess(GenerateLinks annotation, Element element) {
+  private boolean shouldProcess(GenerateLinkBuilder annotation, Element element) {
     return isClass(element) && isIncluded(annotation, element.toString());
   }
 
-  private boolean isIncluded(GenerateLinks annotation, String resourceClass) {
+  private boolean isIncluded(GenerateLinkBuilder annotation, String resourceClass) {
     return resourceClass.matches(annotation.includes()) && ! isExcluded(annotation, resourceClass);
   }
 
-  private boolean isExcluded(GenerateLinks annotation, String resourceClass) {
+  private boolean isExcluded(GenerateLinkBuilder annotation, String resourceClass) {
     return ! Strings.isNullOrEmpty(annotation.excludes()) && resourceClass.matches(annotation.excludes());
   }
 
