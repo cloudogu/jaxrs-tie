@@ -85,6 +85,13 @@ public class ResourceProcessorTest {
       .expect("GLinks");
   }
 
+  @Test
+  public void testRename() {
+    with("H")
+      .processor(new ResourceProcessor())
+      .expect("LinkBuilder");
+  }
+
   public InputStep with(String... classes) {
     return new InputStep(Lists.newArrayList(classes));
   }

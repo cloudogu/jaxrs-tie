@@ -73,18 +73,12 @@ public class ResourceProcessor extends AbstractProcessor {
   private void process(RoundEnvironment roundEnv, Element linkElement) {
     GenerateLinks annotation = linkElement.getAnnotation(GenerateLinks.class);
 
-    List<RootResource> rootResources = new ArrayList<>();
-    for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
-      if (shouldProcess(annotation, element)) {
-        RootResource resource = RootResource.from(processingEnv, element);
-        rootResources.add(resource);
-      }
-    }
+    List<RootResource> rootResources = collectResources(roundEnv, annotation);
 
     TypeElement linkType = MoreElements.asType(linkElement);
 
-    String className = linkType.getSimpleName().toString() + "Links";
-    String packageName = getPackageName(linkType);
+    String className = className(annotation, linkType);
+    String packageName = packageName(annotation, linkType);
 
     Model model = new Model(packageName, className, rootResources);
     try {
@@ -92,6 +86,31 @@ public class ResourceProcessor extends AbstractProcessor {
     } catch (IOException ex) {
       throw new IllegalStateException("failed to create model", ex);
     }
+  }
+
+  private List<RootResource> collectResources(RoundEnvironment roundEnv, GenerateLinks annotation) {
+    List<RootResource> rootResources = new ArrayList<>();
+    for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
+      if (shouldProcess(annotation, element)) {
+        RootResource resource = RootResource.from(processingEnv, element);
+        rootResources.add(resource);
+      }
+    }
+    return rootResources;
+  }
+
+  private String className(GenerateLinks annotation, TypeElement linkType) {
+    if (Strings.isNullOrEmpty(annotation.className())) {
+      return linkType.getSimpleName().toString() + "Links";
+    }
+    return annotation.className();
+  }
+
+  private String packageName(GenerateLinks annotation, TypeElement classElement) {
+    if (Strings.isNullOrEmpty(annotation.packageName())) {
+      return ((PackageElement) classElement.getEnclosingElement()).getQualifiedName().toString();
+    }
+    return annotation.packageName();
   }
 
   private boolean shouldProcess(GenerateLinks annotation, Element element) {
@@ -108,10 +127,6 @@ public class ResourceProcessor extends AbstractProcessor {
 
   private boolean isClass(Element element) {
     return element.getKind() == ElementKind.CLASS;
-  }
-
-  private String getPackageName(TypeElement classElement) {
-    return ((PackageElement) classElement.getEnclosingElement()).getQualifiedName().toString();
   }
 
   private void write(Model model, Element element) throws IOException {
