@@ -23,44 +23,51 @@
  */
 
 plugins {
+  id 'java'
+  id 'maven-publish'
   id 'org.cadixdev.licenser' version '0.5.0'
 }
 
-def licenseHeader = project.file('LICENSE')
+dependencies {
+  implementation 'com.google.auto:auto-common:0.11'
+  implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+  implementation 'com.squareup:javapoet:1.13.0'
+  implementation 'com.google.guava:guava:24.0-jre'
 
-allprojects {
-  apply plugin: 'java'
-  apply plugin: 'maven-publish'
-  apply plugin: 'org.cadixdev.licenser'
+  compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
+  annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
 
-  sourceCompatibility = JavaVersion.VERSION_1_8
+  testImplementation 'com.google.testing.compile:compile-testing:0.19'
+  testImplementation 'javax.validation:validation-api:2.0.1.Final'
 
-  license {
-    header = licenseHeader
-    tasks {
-      gradle {
-        files = project.files('build.gradle', 'settings.gradle', 'gradle.properties')
-      }
-    }
+  // see https://github.com/google/compile-testing/issues/28
+  if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
+    testImplementation files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
   }
-
-  tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-  }
-
-  repositories {
-    mavenCentral()
-  }
-
 }
 
-subprojects {
-  publishing {
-    publications {
-      mavenJava(MavenPublication) {
-        artifactId "jaxrs-tie-${project.name}"
-        from components.java
-      }
+license {
+  header = project.file('LICENSE')
+  tasks {
+    gradle {
+      files = project.files('build.gradle', 'settings.gradle', 'gradle.properties')
+    }
+  }
+}
+
+tasks.withType(JavaCompile) {
+  options.release = 8
+  options.encoding = 'UTF-8'
+}
+
+repositories {
+  mavenCentral()
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
     }
   }
 }
