@@ -31,6 +31,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.SOURCE)
 public @interface GenerateLinks {
 
-  String value() default ".*";
+  String includes() default ".*";
 
 }

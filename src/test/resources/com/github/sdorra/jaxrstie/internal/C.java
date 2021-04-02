@@ -26,5 +26,5 @@ package com.example;
 
 import com.github.sdorra.jaxrstie.GenerateLinks;
 
-@GenerateLinks("org.scmmanager")
+@GenerateLinks(includes = "org.scmmanager")
 public class C {}

@@ -69,13 +69,12 @@ public class ResourceProcessor extends AbstractProcessor {
     return false;
   }
 
-  @SuppressWarnings("UnstableApiUsage")
   private void process(RoundEnvironment roundEnv, Element linkElement) {
     GenerateLinks annotation = linkElement.getAnnotation(GenerateLinks.class);
 
     List<RootResource> rootResources = new ArrayList<>();
     for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {
-      if (isClass(element) && element.toString().matches(annotation.value())) {
+      if (isClass(element) && element.toString().matches(annotation.includes())) {
         RootResource resource = RootResource.from(processingEnv, element);
         rootResources.add(resource);
       }
