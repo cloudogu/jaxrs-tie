@@ -22,35 +22,56 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-public class Model {
+public abstract class Resource extends BaseResource {
 
-  private final String packageName;
-  private final String simpleClassName;
-  private final List<RootResource> rootResources;
+  protected String type;
+  protected Set<SubResource> subResources;
+  protected Set<Endpoint> endpoints;
 
-  public Model(String packageName, String simpleClassName, List<RootResource> rootResources) {
-    this.packageName = packageName;
-    this.simpleClassName = simpleClassName;
-    this.rootResources = rootResources;
+  protected Resource(String type, String name) {
+    super(name);
+    this.type = type;
+    this.parameters = MethodParameters.createEmpty();
+    this.subResources = new LinkedHashSet<>();
+    this.endpoints = new LinkedHashSet<>();
   }
 
-  public String getPackageName() {
-    return packageName;
+  public void addEndpoint(Endpoint endpoint) {
+    this.endpoints.add(endpoint);
   }
 
-  public String getSimpleClassName() {
-    return simpleClassName;
+  public void addSubResource(SubResource resource) {
+    this.subResources.add(resource);
+  }
+
+  @Override
+  public void setParameters(MethodParameters parameters) {
+    this.parameters = parameters;
+  }
+
+  public String getMethodName() {
+    return Names.methodName(name);
+  }
+
+  public String getType() {
+    return type;
   }
 
   public String getClassName() {
-    return packageName.concat(".").concat(simpleClassName);
+    return Names.className(name);
   }
 
-  public List<RootResource> getRootResources() {
-    return rootResources;
+  public Set<Endpoint> getEndpoints() {
+    return endpoints;
   }
+
+  public Set<SubResource> getSubResources() {
+    return subResources;
+  }
+
 }

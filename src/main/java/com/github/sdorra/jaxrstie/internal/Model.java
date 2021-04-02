@@ -22,40 +22,35 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
-import com.google.auto.common.MoreTypes;
+import java.util.List;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.type.TypeMirror;
+public class Model {
 
-public class SubResource extends Resource {
+  private final String packageName;
+  private final String simpleClassName;
+  private final List<RootResource> rootResources;
 
-  public SubResource(String type, String name) {
-    super(type, name);
+  public Model(String packageName, String simpleClassName, List<RootResource> rootResources) {
+    this.packageName = packageName;
+    this.simpleClassName = simpleClassName;
+    this.rootResources = rootResources;
   }
 
-  @Override
-  public String toString() {
-    return name + "(" + parameters + ")";
+  public String getPackageName() {
+    return packageName;
   }
 
-  public static SubResource from(ProcessingEnvironment processingEnv, ExecutableElement element, Resource parent) {
-    TypeMirror returnType = element.getReturnType();
-    Element returnElement = MoreTypes.asElement(returnType);
+  public String getSimpleClassName() {
+    return simpleClassName;
+  }
 
-    String name = Names.of(element);
+  public String getClassName() {
+    return packageName.concat(".").concat(simpleClassName);
+  }
 
-    SubResource resource = new SubResource(returnElement.toString(), name);
-    resource.setParent(parent);
-
-    MethodParameters parameters = Methods.findPathParams(element);
-    resource.setParameters(parameters);
-
-    Resources.append(processingEnv, resource, returnElement);
-
-    return resource;
+  public List<RootResource> getRootResources() {
+    return rootResources;
   }
 }

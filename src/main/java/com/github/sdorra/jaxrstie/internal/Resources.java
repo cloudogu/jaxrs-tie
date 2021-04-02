@@ -22,45 +22,26 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import java.util.Set;
 
-public class RootResource extends Resource {
+public final class Resources {
 
-  public RootResource(String type, String name) {
-    super(type, name);
+  private Resources() {
   }
 
-  @Override
-  public String toString() {
-    StringBuilder buffer = new StringBuilder(name).append("\n");
-    appendEndpoints(buffer, " - ", this);
-    appendSubResources(buffer, " - ", this);
-    return buffer.toString();
-  }
+  public static void append(ProcessingEnvironment processingEnv, Resource resource, Element element) {
+    Set<Methods.MethodWrapper> methods = Methods.findJaxRsMethods(processingEnv, element);
 
-  private void appendEndpoints(StringBuilder buffer, String prefix, Resource resource) {
-    for (Endpoint endpoint : resource.endpoints) {
-      buffer.append(prefix).append(endpoint).append("\n");
+    for (Methods.MethodWrapper method : methods) {
+      if (method.isEndpoint()) {
+        resource.addEndpoint(Endpoint.of(method.getMethod(), resource));
+      } else {
+        resource.addSubResource(SubResource.from(processingEnv, method.getMethod(), resource));
+      }
     }
   }
-
-  private void appendSubResources(StringBuilder buffer, String prefix, Resource resource) {
-    for (SubResource subResource : resource.subResources) {
-      buffer.append(prefix).append(subResource).append("\n");
-      String newPrefix = "   ".concat(prefix);
-      appendEndpoints(buffer, newPrefix, subResource);
-      appendSubResources(buffer, newPrefix, subResource);
-    }
-  }
-
-  public static RootResource from(ProcessingEnvironment processingEnv, Element element) {
-    RootResource rootResource = new RootResource(element.toString(), Names.of(element));
-    Resources.append(processingEnv, rootResource, element);
-    return rootResource;
-  }
-
-
 }

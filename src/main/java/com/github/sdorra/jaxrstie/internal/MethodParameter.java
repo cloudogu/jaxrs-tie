@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;

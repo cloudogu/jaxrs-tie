@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
 import java.util.ArrayList;
 import java.util.List;

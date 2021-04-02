@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
+import com.github.sdorra.jaxrstie.JaxRsTie;
 import com.google.auto.common.MoreElements;
 import org.kohsuke.MetaInfServices;
 

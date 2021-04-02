@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
 import com.google.common.collect.Lists;
 import com.google.common.truth.Truth;
@@ -93,7 +93,7 @@ public class ResourceProcessorTest {
     }
 
     private JavaFileObject resource(String className) {
-      return JavaFileObjects.forResource("com/github/sdorra/jaxrstie/" + className + ".java");
+      return JavaFileObjects.forResource("com/github/sdorra/jaxrstie/internal/" + className + ".java");
     }
 
     InputStep processor(Processor processor) {

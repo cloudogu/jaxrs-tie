@@ -22,56 +22,45 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import javax.lang.model.element.ExecutableElement;
+import java.util.Objects;
 
-public abstract class Resource extends BaseResource {
+public class Endpoint extends BaseResource {
 
-  protected String type;
-  protected Set<SubResource> subResources;
-  protected Set<Endpoint> endpoints;
-
-  protected Resource(String type, String name) {
+  public Endpoint(String name, MethodParameters parameters, BaseResource parent) {
     super(name);
-    this.type = type;
-    this.parameters = MethodParameters.createEmpty();
-    this.subResources = new LinkedHashSet<>();
-    this.endpoints = new LinkedHashSet<>();
-  }
-
-  public void addEndpoint(Endpoint endpoint) {
-    this.endpoints.add(endpoint);
-  }
-
-  public void addSubResource(SubResource resource) {
-    this.subResources.add(resource);
+    this.parameters = parameters;
+    this.parent = parent;
   }
 
   @Override
-  public void setParameters(MethodParameters parameters) {
-    this.parameters = parameters;
+  public String toString() {
+    return name + "(" + parameters + ")";
   }
 
-  public String getMethodName() {
-    return Names.methodName(name);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Endpoint endpoint = (Endpoint) o;
+    return Objects.equals(name, endpoint.name) &&
+      Objects.equals(parameters, endpoint.parameters);
   }
 
-  public String getType() {
-    return type;
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, parameters);
   }
 
-  public String getClassName() {
-    return Names.className(name);
-  }
-
-  public Set<Endpoint> getEndpoints() {
-    return endpoints;
-  }
-
-  public Set<SubResource> getSubResources() {
-    return subResources;
+  public static Endpoint of(ExecutableElement method, BaseResource parent) {
+    String name = method.getSimpleName().toString();
+    return new Endpoint(name, Methods.findPathParams(method), parent);
   }
 
 }

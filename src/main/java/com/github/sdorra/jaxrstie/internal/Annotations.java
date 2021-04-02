@@ -22,45 +22,18 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
-import javax.lang.model.element.ExecutableElement;
-import java.util.Objects;
+import javax.lang.model.element.AnnotationMirror;
+import java.lang.annotation.Annotation;
 
-public class Endpoint extends BaseResource {
+public final class Annotations {
 
-  public Endpoint(String name, MethodParameters parameters, BaseResource parent) {
-    super(name);
-    this.parameters = parameters;
-    this.parent = parent;
+  private Annotations() {
   }
 
-  @Override
-  public String toString() {
-    return name + "(" + parameters + ")";
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Endpoint endpoint = (Endpoint) o;
-    return Objects.equals(name, endpoint.name) &&
-      Objects.equals(parameters, endpoint.parameters);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, parameters);
-  }
-
-  public static Endpoint of(ExecutableElement method, BaseResource parent) {
-    String name = method.getSimpleName().toString();
-    return new Endpoint(name, Methods.findPathParams(method), parent);
+  public static boolean isTypeOf(AnnotationMirror mirror, Class<? extends Annotation> annotation) {
+    return mirror.getAnnotationType().toString().equals(annotation.toString());
   }
 
 }

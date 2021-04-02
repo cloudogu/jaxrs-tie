@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.github.sdorra.jaxrstie;
+package com.github.sdorra.jaxrstie.internal;
 
 import com.google.common.base.Joiner;
 
