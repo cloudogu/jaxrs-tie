@@ -24,7 +24,7 @@
 
 package com.github.sdorra.jaxrstie.internal;
 
-import com.github.sdorra.jaxrstie.JaxRsTie;
+import com.github.sdorra.jaxrstie.GenerateLinks;
 import com.google.auto.common.MoreElements;
 import org.kohsuke.MetaInfServices;
 
@@ -49,8 +49,8 @@ import java.util.Set;
 
 
 @MetaInfServices(Processor.class)
-@SupportedAnnotationTypes("com.github.sdorra.jaxrstie.JaxRsTie")
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedAnnotationTypes("com.github.sdorra.jaxrstie.GenerateLinks")
 public class ResourceProcessor extends AbstractProcessor {
 
   @Override
@@ -71,7 +71,7 @@ public class ResourceProcessor extends AbstractProcessor {
 
   @SuppressWarnings("UnstableApiUsage")
   private void process(RoundEnvironment roundEnv, Element linkElement) {
-    JaxRsTie annotation = linkElement.getAnnotation(JaxRsTie.class);
+    GenerateLinks annotation = linkElement.getAnnotation(GenerateLinks.class);
 
     List<RootResource> rootResources = new ArrayList<>();
     for (Element element : roundEnv.getElementsAnnotatedWith(Path.class)) {

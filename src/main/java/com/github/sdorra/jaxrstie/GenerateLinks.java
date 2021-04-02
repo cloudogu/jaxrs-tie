@@ -29,7 +29,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface JaxRsTie {
+public @interface GenerateLinks {
 
   String value() default ".*";
 

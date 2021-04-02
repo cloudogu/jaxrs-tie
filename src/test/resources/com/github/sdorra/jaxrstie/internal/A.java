@@ -24,7 +24,7 @@
 
 package com.example;
 
-import com.github.sdorra.jaxrstie.JaxRsTie;
+import com.github.sdorra.jaxrstie.GenerateLinks;
 
-@JaxRsTie
+@GenerateLinks
 public class A {}
