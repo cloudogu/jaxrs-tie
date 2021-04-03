@@ -1,6 +1,6 @@
 <table border="0">
 <tr>
-<td width="128">
+<td width="160">
 <img alt="JAX-RS Tie" src="images/logo.png" width="128" height="128" />
 </td>
 <td>
@@ -9,7 +9,8 @@
 
 Generate a type safe link builder from your JAX-RS annotations.
 
-<td>
+</td>
+</tr>
 </table>
 
 ## Why?
