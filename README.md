@@ -47,7 +47,9 @@ With JAX-RS Tie link generation could be look as the following:
 @GET
 @Path("{planet}")
 public String planetLink(@Context UriInfo uriInfo, @PathParam("planet") String planetName) {
-  return new SwLinks(uriInfo).planets().planet(planetName).asString();
+  return new SwLinks(uriInfo).planets()
+                             .planet(planetName)
+                             .asString();
 }
 ``` 
 
@@ -72,6 +74,7 @@ Get the latest stable version from [![Maven Central](https://img.shields.io/mave
 ### Gradle
 
 ```groovy
+compileOnly 'com.github.sdorra:jaxrs-tie:x.y.z'
 annotationProcessor 'com.github.sdorra:jaxrs-tie:x.y.z'
 ```
 
