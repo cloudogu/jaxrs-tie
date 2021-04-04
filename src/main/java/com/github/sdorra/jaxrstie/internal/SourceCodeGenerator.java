@@ -62,7 +62,6 @@ class SourceCodeGenerator {
     builder.addType(createLinkSpec());
 
     JavaFile javaFile = JavaFile.builder(model.getPackageName(), builder.build()).build();
-    javaFile.writeTo(System.out);
     javaFile.writeTo(writer);
   }
 
