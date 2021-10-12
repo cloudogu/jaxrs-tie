@@ -69,20 +69,20 @@ The link builder will automatically find all JAX-RS resources which are annotate
 
 ## Installation
 
-Get the latest stable version from [![Maven Central](https://img.shields.io/maven-central/v/com.cloudogu/jaxrs-tie.svg)](https://search.maven.org/search?q=g:com.cloudogu%20a:jaxrs-tie)
+Get the latest stable version from [![Maven Central](https://img.shields.io/maven-central/v/com.cloudogu.jaxrs-tie/jaxrs-tie.svg)](https://search.maven.org/search?q=g:com.cloudogu.jaxrs-tie%20a:jaxrs-tie)
 
 ### Gradle
 
 ```groovy
-compileOnly 'com.cloudogu:jaxrs-tie:x.y.z'
-annotationProcessor 'com.cloudogu:jaxrs-tie:x.y.z'
+compileOnly 'com.cloudogu.jaxrs-tie:jaxrs-tie:x.y.z'
+annotationProcessor 'com.cloudogu.jaxrs-tie:jaxrs-tie:x.y.z'
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>com.cloudogu</groupId>
+  <groupId>com.cloudogu.jaxrs-tie</groupId>
   <artifactId>jaxrs-tie</artifactId>
   <version>x.y.z</version>
   <optional>true</optional>
