@@ -126,7 +126,6 @@ project.ext {
 }
 
 signing {
-  useGpgCmd()
   sign publishing.publications
 }
 
