@@ -57,10 +57,10 @@ pipeline {
 
     stage('Deployment') {
       when {
-        anyOf(
+        anyOf {
           branch pattern: 'release/*', comparator: 'GLOB'
           branch 'develop'
-        )
+        }
       }
       steps {
         withPublishEnvironment {
