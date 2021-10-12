@@ -38,10 +38,12 @@ pipeline {
 
 void withPublishEnivronment(Closure<Void> closure) {
   withCredentials([
-    usernamePassword(credentialsId: 'mavenCentral-acccessToken', usernameVariable: 'ORG_GRADLE_PROJECT_packagesScmManagerUsername', passwordVariable: 'ORG_GRADLE_PROJECT_packagesScmManagerPassword'),
+    usernamePassword(credentialsId: 'mavenCentral-acccessToken', usernameVariable: 'ORG_GRADLE_PROJECT_sonatypeUsername', passwordVariable: 'ORG_GRADLE_PROJECT_sonatypePassword'),
     file(credentialsId: 'mavenCentral-secretKey-asc-file', variable: 'GPG_KEY_RING'),
-    usernamePassword(credentialsId: 'mavenCentral-secretKey-Passphrase', usernameVariable: 'GPG_KEY_ID', passwordVariable: 'GPG_KEY_PASSWORD')
+    string(credentialsId: 'mavenCentral-secretKey-Passphrase', variable: 'GPG_KEY_PASSWORD')
   ]) {
-    closure.call()
+      withEnv(['GPG_KEY_ID=0x7BEEB938AB585959']) {
+        closure.call()
+      }
   }
 }

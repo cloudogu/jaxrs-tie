@@ -91,7 +91,7 @@ publishing {
           developer {
             id = 'sdorra'
             name = 'Sebastian Sdorra'
-            email = 's.sdorra@gmail.com'
+            email = 'sebastian.sdorra@cloudogu.com'
             timezone = 'Europe/Berlin'
           }
         }
@@ -109,6 +109,22 @@ publishing {
   }
 }
 
+project.ext {
+  // map signing environment variables
+  // this is required because of environment variables should not have a dot in the name
+  // but the gradle signing props are using dots
+  // also we use the set method, because setting props with dots works neither
+  if (isEnvAvailable("GPG_KEY_RING")) {
+    set('signing.secretKeyRingFile', System.getenv("GPG_KEY_RING"))
+  }
+  if (isEnvAvailable("GPG_KEY_ID")) {
+    set('signing.keyId', System.getenv("GPG_KEY_ID"))
+  }
+  if (isEnvAvailable("GPG_KEY_PASSWORD")) {
+    set('signing.password', System.getenv("GPG_KEY_PASSWORD"))
+  }
+}
+
 signing {
   useGpgCmd()
   sign publishing.publications
@@ -118,4 +134,9 @@ nexusPublishing {
   repositories {
     sonatype()
   }
+}
+
+def isEnvAvailable(String key) {
+  String value = System.getenv(key)
+  return value != null && !value.trim().isEmpty()
 }
