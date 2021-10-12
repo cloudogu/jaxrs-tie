@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021, Sebastian Sdorra
+ * Copyright (c) 2021, Cloudogu GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -79,7 +79,7 @@ publishing {
       pom {
         name = 'JAX-RS Tie'
         description = 'Generates link builder from JAX-RS annotation'
-        url = 'https://github.com/sdorra/jaxrs-tie'
+        url = 'https://github.com/cloudogu/jaxrs-tie'
         inceptionYear = '2021'
         licenses {
           license {
@@ -96,13 +96,13 @@ publishing {
           }
         }
         scm {
-          url = 'https://github.com/sdorra/jaxrs-tie'
-          connection = 'scm:git:git://github.com/sdorra/jaxrs-tie.git'
-          developerConnection = 'scm:git:git://github.com/sdorra/jaxrs-tie.git'
+          url = 'https://github.com/cloudogu/jaxrs-tie'
+          connection = 'scm:git:git://github.com/cloudogu/jaxrs-tie.git'
+          developerConnection = 'scm:git:git://github.com/cloudogu/jaxrs-tie.git'
         }
         issueManagement {
           system = "github"
-          url = 'https://github.com/sdorra/jaxrs-tie/issues'
+          url = 'https://github.com/cloudogu/jaxrs-tie/issues'
         }
       }
     }

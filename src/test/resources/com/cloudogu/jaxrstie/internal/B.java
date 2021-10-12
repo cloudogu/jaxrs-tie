@@ -22,6 +22,9 @@
  * SOFTWARE.
  */
 
-rootProject.name = 'jaxrs-tie'
-include 'core'
-include 'processor'
+package com.example;
+
+import com.cloudogu.jaxrstie.GenerateLinkBuilder;
+
+@GenerateLinkBuilder
+public class B {}

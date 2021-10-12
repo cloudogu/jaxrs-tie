@@ -34,7 +34,7 @@ uriInfo.getBaseUriBuilder()
        .path(PersonResource.class, "person")
        .path("luke")
        .path(PlanetResource.class, "planet")
-       .build("tatooine")`
+       .build("tatooine");
 ```
 
 JAX-RS Tie tries to tacle both problems.
@@ -69,20 +69,20 @@ The link builder will automatically find all JAX-RS resources which are annotate
 
 ## Installation
 
-Get the latest stable version from [![Maven Central](https://img.shields.io/maven-central/v/com.github.sdorra/jaxrs-tie.svg)](https://search.maven.org/search?q=g:com.github.sdorra%20a:jaxrs-tie)
+Get the latest stable version from [![Maven Central](https://img.shields.io/maven-central/v/com.cloudogu/jaxrs-tie.svg)](https://search.maven.org/search?q=g:com.cloudogu%20a:jaxrs-tie)
 
 ### Gradle
 
 ```groovy
-compileOnly 'com.github.sdorra:jaxrs-tie:x.y.z'
-annotationProcessor 'com.github.sdorra:jaxrs-tie:x.y.z'
+compileOnly 'com.cloudogu:jaxrs-tie:x.y.z'
+annotationProcessor 'com.cloudogu:jaxrs-tie:x.y.z'
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>com.github.sdorra</groupId>
+  <groupId>com.cloudogu</groupId>
   <artifactId>jaxrs-tie</artifactId>
   <version>x.y.z</version>
   <optional>true</optional>

@@ -22,6 +22,44 @@
  * SOFTWARE.
  */
 
-rootProject.name = 'jaxrs-tie'
-include 'core'
-include 'processor'
+package com.cloudogu.jaxrstie;
+
+import java.lang.annotation.*;
+
+/**
+ * Generate a link builder from jax-rs annotations.
+ */
+@Documented
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.SOURCE)
+public @interface GenerateLinkBuilder {
+
+  /**
+   * Name of the generated link builder class.
+   *
+   * @return class name of link builder
+   */
+  String className() default "";
+
+  /**
+   * Package of generated link builder.
+   *
+   * @return package of link builder
+   */
+  String packageName() default "";
+
+  /**
+   * Specify which resources are included in the link generation.
+   * Defaults to all resources.
+   *
+   * @return regex for resource inclusion
+   */
+  String includes() default ".*";
+
+  /**
+   * Specify which resources are excluded from the link generation.
+   *
+   * @return regex for resource exclusion
+   */
+  String excludes() default "";
+}

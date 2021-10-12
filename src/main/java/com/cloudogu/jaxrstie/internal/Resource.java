@@ -22,6 +22,56 @@
  * SOFTWARE.
  */
 
-rootProject.name = 'jaxrs-tie'
-include 'core'
-include 'processor'
+package com.cloudogu.jaxrstie.internal;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public abstract class Resource extends BaseResource {
+
+  protected String type;
+  protected Set<SubResource> subResources;
+  protected Set<Endpoint> endpoints;
+
+  protected Resource(String type, String name) {
+    super(name);
+    this.type = type;
+    this.parameters = MethodParameters.createEmpty();
+    this.subResources = new LinkedHashSet<>();
+    this.endpoints = new LinkedHashSet<>();
+  }
+
+  public void addEndpoint(Endpoint endpoint) {
+    this.endpoints.add(endpoint);
+  }
+
+  public void addSubResource(SubResource resource) {
+    this.subResources.add(resource);
+  }
+
+  @Override
+  public void setParameters(MethodParameters parameters) {
+    this.parameters = parameters;
+  }
+
+  public String getMethodName() {
+    return Names.methodName(name);
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public String getClassName() {
+    return Names.className(name);
+  }
+
+  public Set<Endpoint> getEndpoints() {
+    return endpoints;
+  }
+
+  public Set<SubResource> getSubResources() {
+    return subResources;
+  }
+
+}
