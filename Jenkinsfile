@@ -80,10 +80,7 @@ pipeline {
 
     stage('Deployment') {
       when {
-        anyOf {
-          branch pattern: 'release/*', comparator: 'GLOB'
-          branch 'develop'
-        }
+        branch pattern: 'release/*', comparator: 'GLOB'
         expression { return isBuildSuccess() }
       }
       steps {
