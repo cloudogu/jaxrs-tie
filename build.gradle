@@ -142,7 +142,7 @@ def isEnvAvailable(String key) {
   return value != null && !value.trim().isEmpty()
 }
 
-// release tasks
+// release related tasks
 
 task setVersion {
   doLast {
@@ -151,15 +151,13 @@ task setVersion {
     }
 
     String version = project.property('newVersion')
-    setVersion(version)
+    setNewVersion(version)
   }
 }
 
 task setVersionToNextSnapshot {
   doLast {
-    VersionNumber v = VersionNumber.parse(project.version)
-    String version = "${v.major}.${v.minor}.${v.micro + 1}-SNAPSHOT"
-    setVersion(version)
+    setNewVersion(nextSnapshotVersion)
   }
 }
 
@@ -169,23 +167,26 @@ task printVersion {
   }
 }
 
-def setVersion(String version) {
-  Properties properties = new Properties()
-
+def setNewVersion(String newVersion) {
   File propertiesFile = new File(project.rootDir, 'gradle.properties')
-  propertiesFile.withInputStream { stream ->
-    properties.load(stream)
-  }
 
-  if (properties.version == version) {
-    println "project uses already version ${version}"
+  if (project.version == newVersion) {
+    println "project uses already version ${newVersion}"
     return
   }
 
-  println "set version from ${properties.version} to ${version}"
+  def lines = propertiesFile.readLines('UTF-8')
+  def newLines = lines.collect{ line ->
+    if (line.trim().startsWith('version')) {
+      return "version = ${newVersion}"
+    }
+    return line
+  }
 
-  properties.version = version
-  propertiesFile.withOutputStream { stream ->
-    properties.store(stream, 'gradle properties')
+  println "set version from ${project.version} to ${newVersion}"
+  propertiesFile.withWriter('UTF-8') {writer ->
+    newLines.forEach { line ->
+      writer.writeLine(line)
+    }
   }
 }
