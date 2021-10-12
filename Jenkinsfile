@@ -88,7 +88,7 @@ pipeline {
       }
       steps {
         withPublishEnvironment {
-          sh './gradlew publish'
+          sh './gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository'
         }
       }
     }
