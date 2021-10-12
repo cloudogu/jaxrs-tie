@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 import org.gradle.util.VersionNumber
 
 plugins {
@@ -53,7 +54,7 @@ license {
   header = project.file('LICENSE')
   tasks {
     gradle {
-      files = project.files('build.gradle', 'settings.gradle', 'gradle.properties')
+      files = project.files('Jenkinsfile', 'build.gradle', 'settings.gradle', 'gradle.properties')
     }
   }
 }
