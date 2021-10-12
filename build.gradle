@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import org.gradle.util.VersionNumber
 
 plugins {
   id 'java'
@@ -138,4 +139,52 @@ nexusPublishing {
 def isEnvAvailable(String key) {
   String value = System.getenv(key)
   return value != null && !value.trim().isEmpty()
+}
+
+// release tasks
+
+task setVersion {
+  doLast {
+    if (!project.hasProperty('newVersion')) {
+      throw new GradleException('usage setVersion -PnewVersion=x.y.z')
+    }
+
+    String version = project.property('newVersion')
+    setVersion(version)
+  }
+}
+
+task setVersionToNextSnapshot {
+  doLast {
+    VersionNumber v = VersionNumber.parse(project.version)
+    String version = "${v.major}.${v.minor}.${v.micro + 1}-SNAPSHOT"
+    setVersion(version)
+  }
+}
+
+task printVersion {
+  doLast {
+    println project.version
+  }
+}
+
+def setVersion(String version) {
+  Properties properties = new Properties()
+
+  File propertiesFile = new File(project.rootDir, 'gradle.properties')
+  propertiesFile.withInputStream { stream ->
+    properties.load(stream)
+  }
+
+  if (properties.version == version) {
+    println "project uses already version ${version}"
+    return
+  }
+
+  println "set version from ${properties.version} to ${version}"
+
+  properties.version = version
+  propertiesFile.withOutputStream { stream ->
+    properties.store(stream, 'gradle properties')
+  }
 }
