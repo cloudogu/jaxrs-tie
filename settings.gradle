@@ -23,5 +23,3 @@
  */
 
 rootProject.name = 'jaxrs-tie'
-include 'core'
-include 'processor'
