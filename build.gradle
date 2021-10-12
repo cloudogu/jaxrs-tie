@@ -157,7 +157,8 @@ task setVersion {
 
 task setVersionToNextSnapshot {
   doLast {
-    setNewVersion(nextSnapshotVersion)
+    VersionNumber v = VersionNumber.parse(project.version)
+    setNewVersion("${v.major}.${v.minor}.${v.micro + 1}-SNAPSHOT")
   }
 }
 
