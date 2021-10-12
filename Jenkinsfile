@@ -84,6 +84,7 @@ pipeline {
           branch pattern: 'release/*', comparator: 'GLOB'
           branch 'develop'
         }
+        expression { return isBuildSuccess() }
       }
       steps {
         withPublishEnvironment {
@@ -95,6 +96,7 @@ pipeline {
     stage('Update Repository') {
       when {
         branch pattern: 'release/*', comparator: 'GLOB'
+        expression { return isBuildSuccess() }
       }
       steps {
         // merge main in to develop
@@ -107,9 +109,9 @@ pipeline {
         commit 'prepare for next development iteration'
 
         // push changes back to remote repository
-        authGit 'push origin main --tags'
-        authGit 'push origin develop --tags'
-        authGit "push origin :${env.BRANCH_NAME}"
+        authGit 'cesmarvin-github', 'push origin main --tags'
+        authGit 'cesmarvin-github', 'push origin develop --tags'
+        authGit 'cesmarvin-github', "push origin :${env.BRANCH_NAME}"
       }
     }
 
