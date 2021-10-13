@@ -31,14 +31,18 @@ import javax.ws.rs.core.UriInfo;
 
 public final class ELinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public ELinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
+  }
+
+  public ELinks(URI uri) {
+    this.uri = uri;
   }
 
   public SubResourceWithParamLinks subResourceWithParam() {
-    return new SubResourceWithParamLinks(uriInfo.getBaseUriBuilder().path(SubResourceWithParam.class));
+    return new SubResourceWithParamLinks(UriBuilder.fromUri(uri).path(SubResourceWithParam.class));
   }
 
   public static class SubResourceWithParamLinks {

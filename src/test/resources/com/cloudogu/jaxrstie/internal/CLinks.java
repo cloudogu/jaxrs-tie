@@ -30,12 +30,15 @@ import javax.ws.rs.core.UriInfo;
 
 public final class CLinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public CLinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
   }
 
+  public CLinks(URI uri) {
+    this.uri = uri;
+  }
 
   public static class BuilderLink {
 

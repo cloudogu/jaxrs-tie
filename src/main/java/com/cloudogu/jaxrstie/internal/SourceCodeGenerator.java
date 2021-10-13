@@ -44,16 +44,23 @@ class SourceCodeGenerator {
   private static final String STATEMENT_FIELD_ASSIGNMENT = "this.$N = $N";
 
   void generate(Writer writer, Model model) throws IOException {
-    MethodSpec constructor = MethodSpec.constructorBuilder()
+    MethodSpec uriInfoConstructor = MethodSpec.constructorBuilder()
       .addModifiers(Modifier.PUBLIC)
       .addParameter(UriInfo.class, FIELD_URI_INFO)
-      .addStatement(STATEMENT_FIELD_ASSIGNMENT, FIELD_URI_INFO, FIELD_URI_INFO)
+      .addStatement("this.$N = $N.getBaseUri()", FIELD_URI, FIELD_URI_INFO)
+      .build();
+
+    MethodSpec uriConstructor = MethodSpec.constructorBuilder()
+      .addModifiers(Modifier.PUBLIC)
+      .addParameter(URI.class, FIELD_URI)
+      .addStatement(STATEMENT_FIELD_ASSIGNMENT, FIELD_URI, FIELD_URI)
       .build();
 
     TypeSpec.Builder builder = TypeSpec.classBuilder(model.getSimpleClassName())
       .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-      .addField(UriInfo.class, FIELD_URI_INFO, Modifier.PRIVATE, Modifier.FINAL)
-      .addMethod(constructor);
+      .addField(URI.class, FIELD_URI, Modifier.PRIVATE, Modifier.FINAL)
+      .addMethod(uriInfoConstructor)
+      .addMethod(uriConstructor);
 
     for (RootResource rootResource : model.getRootResources()) {
       addResource(builder, rootResource);
@@ -133,7 +140,8 @@ class SourceCodeGenerator {
     MethodSpec methodSpec = MethodSpec.methodBuilder(resource.getMethodName())
       .addModifiers(Modifier.PUBLIC)
       .returns(className)
-      .addStatement("return new $T($N.getBaseUriBuilder().path($T.class))", className, FIELD_URI_INFO, ClassName.bestGuess(resource.getType()))
+//    return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(ResourceWithValidation.class));
+      .addStatement("return new $T($T.fromUri($N).path($T.class))", className, UriBuilder.class, FIELD_URI, ClassName.bestGuess(resource.getType()))
       .build();
 
     parent.addMethod(methodSpec);

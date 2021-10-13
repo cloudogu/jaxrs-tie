@@ -30,10 +30,14 @@ import javax.ws.rs.core.UriInfo;
 
 public final class ALinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public ALinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
+  }
+
+  public ALinks(URI uri) {
+    this.uri = uri;
   }
 
   public static class BuilderLink {

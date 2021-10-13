@@ -31,14 +31,18 @@ import javax.ws.rs.core.UriInfo;
 
 public final class DLinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public DLinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
+  }
+
+  public DLinks(URI uri) {
+    this.uri = uri;
   }
 
   public SubLinks sub() {
-    return new SubLinks(uriInfo.getBaseUriBuilder().path(SubResource.class));
+    return new SubLinks(UriBuilder.fromUri(uri).path(SubResource.class));
   }
 
   public static class SubLinks {

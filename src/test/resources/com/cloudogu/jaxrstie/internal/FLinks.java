@@ -31,14 +31,18 @@ import javax.ws.rs.core.UriInfo;
 
 public final class FLinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public FLinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
+  }
+
+  public FLinks(URI uri) {
+    this.uri = uri;
   }
 
   public ResourceWithValidationLinks resourceWithValidation() {
-    return new ResourceWithValidationLinks(uriInfo.getBaseUriBuilder().path(ResourceWithValidation.class));
+    return new ResourceWithValidationLinks(UriBuilder.fromUri(uri).path(ResourceWithValidation.class));
   }
 
   public static class ResourceWithValidationLinks {

@@ -31,14 +31,18 @@ import javax.ws.rs.core.UriInfo;
 
 public final class BLinks {
 
-  private final UriInfo uriInfo;
+  private final URI uri;
 
   public BLinks(UriInfo uriInfo) {
-    this.uriInfo = uriInfo;
+    this.uri = uriInfo.getBaseUri();
+  }
+
+  public BLinks(URI uri) {
+    this.uri = uri;
   }
 
   public SimpleLinks simple() {
-    return new SimpleLinks(uriInfo.getBaseUriBuilder().path(SimpleResource.class));
+    return new SimpleLinks(UriBuilder.fromUri(uri).path(SimpleResource.class));
   }
 
   public static class SimpleLinks {
