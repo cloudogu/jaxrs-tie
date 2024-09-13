@@ -24,10 +24,10 @@
 
 package com.example;
 
-import java.lang.String;
-import java.net.URI;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
+import java.lang.String;
+import java.net.URI;
 
 public final class DLinks {
 

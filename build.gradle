@@ -70,6 +70,13 @@ java {
   withJavadocJar()
 }
 
+test {
+  // See: https://github.com/google/compile-testing/issues/222
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED")
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED")
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED")
+}
+
 repositories {
   mavenCentral()
 }
