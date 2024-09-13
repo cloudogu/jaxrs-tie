@@ -26,8 +26,8 @@ pipeline {
 
   agent {
     docker {
-      image 'openjdk:11'
-      label 'docker'
+      image 'scmmanager/java-build:17.0.9_9'
+      label 'scmm'
     }
   }
 
@@ -42,14 +42,17 @@ pipeline {
         branch pattern: 'release/*', comparator: 'GLOB'
       }
       steps {
+        // fetch all remotes from origin
+        sh 'git config "remote.origin.fetch" "+refs/heads/*:refs/remotes/origin/*"'
+        authGit 'SCM-Manager', 'fetch --all'
+
+        sh "git checkout ${env.BRANCH_NAME}"
+        sh "git reset --hard origin/${env.BRANCH_NAME}"
+
         // read version from brach, set it and commit it
         sh "./gradlew setVersion -PnewVersion=${releaseVersion}"
         sh 'git add gradle.properties'
         commit "release version ${releaseVersion}"
-
-        // fetch all remotes from origin
-        sh 'git config "remote.origin.fetch" "+refs/heads/*:refs/remotes/origin/*"'
-        authGit 'SCM-Manager', 'git fetch --all'
 
         // checkout, reset and merge
         sh "git checkout main"
