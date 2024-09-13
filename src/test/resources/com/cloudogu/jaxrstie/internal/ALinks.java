@@ -26,7 +26,7 @@ package com.example;
 
 import java.lang.String;
 import java.net.URI;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.UriInfo;
 
 public final class ALinks {
 

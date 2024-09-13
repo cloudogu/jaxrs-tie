@@ -8,7 +8,7 @@ Generate a type safe link builder from your JAX-RS annotations.
 
 In modern rest applications it is usual to generate links between resources ([Rest Maturity Model Level 3](https://martinfowler.com/articles/richardsonMaturityModel.html#level3)).
 
-In JAX-RS resources can be linked using a [UriBuilder](https://docs.oracle.com/javaee/7/api/javax/ws/rs/core/UriBuilder.html) for example:
+In JAX-RS resources can be linked using a [UriBuilder](https://jakarta.ee/specifications/restful-ws/3.0/apidocs/jakarta/ws/rs/core/uribuilder) for example:
 
 ```java
 @GET
