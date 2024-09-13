@@ -24,9 +24,9 @@
 
 package com.example;
 
+import jakarta.ws.rs.core.UriInfo;
 import java.lang.String;
 import java.net.URI;
-import javax.ws.rs.core.UriInfo;
 
 public final class GLinks {
 

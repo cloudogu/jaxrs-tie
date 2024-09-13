@@ -34,15 +34,15 @@ plugins {
 
 dependencies {
   implementation 'com.google.auto:auto-common:0.11'
-  implementation 'javax.ws.rs:javax.ws.rs-api:2.1'
+  implementation 'jakarta.ws.rs:jakarta.ws.rs-api:4.0.0'
   implementation 'com.squareup:javapoet:1.13.0'
   implementation 'com.google.guava:guava:30.1.1-jre'
 
   compileOnly 'org.kohsuke.metainf-services:metainf-services:1.7'
   annotationProcessor 'org.kohsuke.metainf-services:metainf-services:1.7'
 
-  testImplementation 'com.google.testing.compile:compile-testing:0.19'
-  testImplementation 'javax.validation:validation-api:2.0.1.Final'
+  testImplementation 'com.google.testing.compile:compile-testing:0.21.0'
+  testImplementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
   // see https://github.com/google/compile-testing/issues/28
   if (JavaVersion.current() <= JavaVersion.VERSION_1_8) {
@@ -60,14 +60,21 @@ license {
 }
 
 tasks.withType(JavaCompile) {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
+  sourceCompatibility = JavaVersion.VERSION_17
+  targetCompatibility = JavaVersion.VERSION_17
   options.encoding = 'UTF-8'
 }
 
 java {
   withSourcesJar()
   withJavadocJar()
+}
+
+test {
+  // See: https://github.com/google/compile-testing/issues/222
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED")
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED")
+  jvmArgs("--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED")
 }
 
 repositories {

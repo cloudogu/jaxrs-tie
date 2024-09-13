@@ -29,9 +29,9 @@ import com.google.auto.common.Visibility;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.*;
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import jakarta.ws.rs.HttpMethod;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
