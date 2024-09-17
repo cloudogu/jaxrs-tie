@@ -44,7 +44,7 @@ pipeline {
       steps {
         // fetch all remotes from origin
         sh 'git config "remote.origin.fetch" "+refs/heads/*:refs/remotes/origin/*"'
-        authGit 'SCM-Manager', 'fetch --all'
+        sh 'git fetch --all'
 
         sh "git checkout ${env.BRANCH_NAME}"
         sh "git reset --hard origin/${env.BRANCH_NAME}"
@@ -109,22 +109,12 @@ pipeline {
         commit 'prepare for next development iteration'
 
         // push changes back to remote repository
-        authGit 'SCM-Manager', 'push origin main --tags'
-        authGit 'SCM-Manager', 'push origin develop --tags'
-        authGit 'SCM-Manager', "push origin :${env.BRANCH_NAME}"
+        authGit 'cesmarvin-github', 'push origin main --tags'
+        authGit 'cesmarvin-github', 'push origin develop --tags'
+        authGit 'cesmarvin-github', "push origin :${env.BRANCH_NAME}"
       }
     }
 
-    stage('Update GitHub') {
-      when {
-        branch pattern: 'main', comparator: 'GLOB'
-        expression { return isBuildSuccess() }
-      }
-      steps {
-        // push to GitHub
-        authGit 'cesmarvin', 'push -f https://github.com/cloudogu/jaxrs-tie main --tags'
-      }
-    }
   }
 
 }
