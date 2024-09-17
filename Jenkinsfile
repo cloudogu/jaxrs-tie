@@ -43,6 +43,7 @@ pipeline {
       }
       steps {
         // fetch all remotes from origin
+        sh "git tag -d ${releaseVersion} || true"
         sh 'git config "remote.origin.fetch" "+refs/heads/*:refs/remotes/origin/*"'
         sh 'git fetch --all'
 
