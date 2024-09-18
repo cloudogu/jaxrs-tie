@@ -110,9 +110,9 @@ pipeline {
         commit 'prepare for next development iteration'
 
         // push changes back to remote repository
-        authGit 'cesmarvin-github', 'push origin main --tags'
-        authGit 'cesmarvin-github', 'push origin develop --tags'
-        authGit 'cesmarvin-github', "push origin :${env.BRANCH_NAME}"
+        authGit 'cesmarvin', 'push origin main --tags'
+        authGit 'cesmarvin', 'push origin develop --tags'
+        authGit 'cesmarvin', "push origin :${env.BRANCH_NAME}"
       }
     }
 
@@ -123,8 +123,8 @@ pipeline {
 void withPublishEnvironment(Closure<Void> closure) {
   withCredentials([
     usernamePassword(credentialsId: 'mavenCentral-acccessToken', usernameVariable: 'ORG_GRADLE_PROJECT_sonatypeUsername', passwordVariable: 'ORG_GRADLE_PROJECT_sonatypePassword'),
-    file(credentialsId: 'oss-gpg-secring', variable: 'GPG_KEY_RING'),
-    usernamePassword(credentialsId: 'oss-keyid-and-passphrase', usernameVariable: 'GPG_KEY_ID', passwordVariable: 'GPG_KEY_PASSWORD')
+    file(credentialsId: 'mavenCentral-secretKey-asc-file', variable: 'GPG_KEY_RING'),
+    usernamePassword(credentialsId: 'mavenCentral-secretKey-Passphrase-with-keyId', usernameVariable: 'GPG_KEY_ID', passwordVariable: 'GPG_KEY_PASSWORD')
   ]) {
     closure.call()
   }
